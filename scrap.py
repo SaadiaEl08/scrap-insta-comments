@@ -29,7 +29,7 @@ def prepare_browser():
     options.add_experimental_option("useAutomationExtension", False)
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    # options.add_argument("--headless=new")
+    options.add_argument("--headless=new")
     options.add_argument(
         "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
     )
@@ -38,11 +38,6 @@ def prepare_browser():
     service = Service(ChromeDriverManager().install())
     # Launch Chrome browser
     chrome = webdriver.Chrome(service=service, options=options)
-    # # Navigate to Instagram before adding cookies
-    # chrome.get("https://www.instagram.com")
-    # # Pause for the page to load fully
-    # time.sleep(5)
-    # # add_login_cookie(chrome)
     print("prepare browser ended....")
     return chrome
 
@@ -75,22 +70,6 @@ def login(chrome):
 
     except KeyboardInterrupt as e:
         print("finish login .....", e)
-
-
-def add_login_cookie(chrome):
-    # Define the expiration date and time
-    expiration_date = datetime.now() + timedelta(days=1)
-    # Convert to Unix timestamp
-    expiration_timestamp = time.mktime(expiration_date.timetuple())
-    logging.info("Adding login cookies...")
-    with open("cookies.json", "r") as file:
-        cookies = json.load(file)
-        for cookie in cookies:
-            cookie["expiry"] = expiration_timestamp
-            chrome.add_cookie(cookie)
-    chrome.refresh()
-    time.sleep(10)
-    logging.info("finished adding login cookies...")
 
 def get_comments(chrome):
     print("start getting comments ....")
